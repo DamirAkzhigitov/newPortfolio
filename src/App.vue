@@ -1,5 +1,5 @@
 <template>
-  <div class='theme theme-light'>
+  <div class='theme theme-light theme-default'>
     <RouterView />
   </div>
 

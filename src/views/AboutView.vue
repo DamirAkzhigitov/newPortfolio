@@ -2,8 +2,8 @@
   <div class='about-page'>
     <avatar-info class='avatar-info' />
     <short-description class='short-description' />
-    <experience-list class='experience-list' />
     <contact-block class='contact-block'/>
+    <experience-list class='experience-list' />
     <education-block class='education-block'/>
     <projects-description class='projects-description' />
     <skills-list class='skills-list'/>
@@ -27,9 +27,9 @@ const ExperienceList = defineAsyncComponent(() => import("@/components/AboutView
   display: grid;
   grid-template-columns: 60% 1fr;
   grid-template-rows: repeat(5, auto);
-  grid-gap: 5px;
+  grid-gap: var(--space-xs);
   max-width: 1024px;
-  margin: 40px auto 0;
+  margin: var(--space-l) auto 0;
 
   .avatar-info,
   .projects-description,
@@ -38,8 +38,7 @@ const ExperienceList = defineAsyncComponent(() => import("@/components/AboutView
   }
 
   & > section {
-    padding: 10px;
-    border: 1px solid;
+    padding: var(--space-s);
   }
 }
 </style>
