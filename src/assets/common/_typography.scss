@@ -22,3 +22,9 @@
 .text-nowrap {
   white-space: nowrap;
 }
+
+@media screen and (max-width: 600px) {
+  .text-bold-large {
+    font-size: 14px;
+  }
+}
