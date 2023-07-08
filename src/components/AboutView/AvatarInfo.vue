@@ -51,11 +51,9 @@
 </template>
 
 <script setup lang="ts">
-import { ref, onMounted } from 'vue'
-
-const format = (str) => str.toLowerCase().replace(/[^a-zA-Z\d|&]/g, '_')
-
-const getIcon = (name) => `/logos/${name}.svg`
+import { ref, onMounted, Ref } from 'vue'
+import { format, getIcon } from '@/utils/formatters'
+import { SkillResponse } from '@/models/api/skills'
 
 const loadingsSkills = [
   {
@@ -71,8 +69,8 @@ const loadingsSkills = [
 
 const skillsLeft = ref(loadingsSkills)
 const skillsRight = ref(loadingsSkills)
-
 const hardSkills = ref([])
+const skillsResponse: Ref<SkillResponse> = ref([])
 
 const addIcons = (icons) => {
   let iconCount = icons.length
@@ -97,18 +95,22 @@ const addIcons = (icons) => {
   pushIcon()
 }
 
-const getSkills = async () => {
-  const data = await fetch('/api/skills')
+const fetchSkills = async () => {
+  try {
+    const data = await fetch('/api/skills', {
+      cache: 'force-cache'
+    })
+    skillsResponse.value = await data.json()
+  } catch (e) {
+    console.error('fetchSkills error: ', e)
+  }
+}
+const setSkills = () => {
+  if (Array.isArray(skillsResponse.value) && skillsResponse.value.length > 0) {
+    const response = skillsResponse.value[0]
 
-  const response = await data.json()
-
-  if (Array.isArray(response) && response.length > 0) {
-    const skillsResponse = response[0]
-
-    const { SS: skillList } = skillsResponse.skills
-    const { L: hardSkillResponse } = skillsResponse.hardSkills
-
-    console.log('hardSkills: ', hardSkills)
+    const { SS: skillList } = response.skills
+    const { L: hardSkillResponse } = response.hardSkills
 
     const rightSide = skillList.map((item) => {
       const iconName = format(item)
@@ -134,8 +136,9 @@ const getSkills = async () => {
   }
 }
 
-onMounted(() => {
-  getSkills()
+onMounted(async () => {
+  await fetchSkills()
+  setSkills()
 })
 </script>
 
