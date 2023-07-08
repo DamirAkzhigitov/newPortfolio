@@ -11,7 +11,7 @@
     </ul>
     <div class="profile-container d-flex justify-center items-center flex-column">
       <figure class="profile-picture__container">
-        <img src="/Pic.png" class="profile-picture__image" alt="" />
+        <img src="/profile_pic.jpg" class="profile-picture__image" alt="" />
         <figcaption class="profile-picture__tag text-bold-large text-nowrap">
           Frontend Engineer
         </figcaption>
@@ -31,11 +31,18 @@
     <div class="avatar-hard-skills items-start">
       <div
         v-for="skill in hardSkills"
-        :key="skill.alt"
-        class="avatar-hard-skills__item"
+        :key="skill.name"
+        class="avatar-hard-skills__item animate__animated animate__slideInDown"
         :style="`background-color: ${skill.color}`"
       >
-        <img :src="skill.icon" height="24" width="24" class="hard-skills__logo" />
+        <img
+          :src="skill.logo"
+          :title="skill.name"
+          height="24"
+          width="24"
+          class="hard-skills__logo"
+          :alt="skill.name"
+        />
       </div>
     </div>
   </section>
@@ -47,8 +54,6 @@ import { ref, onMounted } from 'vue'
 const format = (str) => str.toLowerCase().replace(/[^a-zA-Z\d|&]/g, '_')
 
 const getIcon = (name) => `/logos/${name}.svg`
-
-const loading = ref(true)
 
 const loadingsSkills = [
   {
@@ -65,13 +70,30 @@ const loadingsSkills = [
 const skillsLeft = ref(loadingsSkills)
 const skillsRight = ref(loadingsSkills)
 
-const hardSkills = ref([
-  {
-    icon: '/logos/git.svg',
-    alt: 'git',
-    color: 'rgba(240, 60, 46, 0.1);'
+const hardSkills = ref([])
+
+const addIcons = (icons) => {
+  let iconCount = icons.length
+
+  iconCount = iconCount - 1
+
+  hardSkills.value.push(icons[iconCount])
+
+  const pushIcon = () => {
+    if (iconCount < 0) return
+
+    setTimeout(() => {
+      iconCount = iconCount - 1
+
+      if (icons[iconCount]) {
+        hardSkills.value.push(icons[iconCount])
+        pushIcon()
+      }
+    }, 1000)
   }
-])
+
+  pushIcon()
+}
 
 const getSkills = async () => {
   const data = await fetch('/api/skills')
@@ -82,6 +104,9 @@ const getSkills = async () => {
     const skillsResponse = response[0]
 
     const { SS: skillList } = skillsResponse.skills
+    const { L: hardSkillResponse } = skillsResponse.hardSkills
+
+    console.log('hardSkills: ', hardSkills)
 
     const rightSide = skillList.map((item) => {
       const iconName = format(item)
@@ -92,11 +117,18 @@ const getSkills = async () => {
       }
     })
 
+    addIcons(
+      hardSkillResponse.map(({ M }) => {
+        return {
+          name: M.name.S,
+          color: `rgba(${M.color.S});`,
+          logo: M.logo.S
+        }
+      })
+    )
+
     skillsLeft.value = rightSide.splice(0, 3)
     skillsRight.value = rightSide
-
-    // loading.value = false
-    console.log('skillsLeft: ', skillsLeft.value)
   }
 }
 
@@ -106,8 +138,6 @@ onMounted(() => {
 </script>
 
 <style lang="scss">
-$shadow: 5px 5px 35px -15px rgba(0, 0, 0, 0.2);
-
 .avatar-container {
   display: grid;
   grid-template-rows: 1fr 60px;
@@ -119,7 +149,6 @@ $shadow: 5px 5px 35px -15px rgba(0, 0, 0, 0.2);
   margin: 0 auto;
 
   .profile-container {
-    box-shadow: $shadow;
     border-radius: var(--space-m);
     padding: var(--space-m);
 
@@ -127,18 +156,17 @@ $shadow: 5px 5px 35px -15px rgba(0, 0, 0, 0.2);
       &__image {
         height: 180px;
         width: auto;
+        border-radius: 15px;
       }
       &__container {
         position: relative;
-        height: 150px;
       }
       &__tag {
         position: absolute;
-        bottom: 0;
+        bottom: -10px;
         right: 50%;
         transform: translate(50%, -50%);
         background: linear-gradient(135deg, #26cbff 0%, #1b67d9 64.06%, #0f44ff 100%);
-        box-shadow: 0 5px 20px rgba(250, 118, 96, 0.2);
         border-radius: var(--space-xs);
         text-align: center;
         color: #ffffff;
@@ -172,17 +200,12 @@ $shadow: 5px 5px 35px -15px rgba(0, 0, 0, 0.2);
       padding: var(--space-sm) var(--space-m);
       display: flex;
       align-items: center;
-      box-shadow: $shadow;
       transition: all 0.5s ease-out;
 
       border-radius: var(--space-xs);
       margin: var(--space-s);
 
       background-color: #fff;
-
-      &:hover {
-        box-shadow: 5px 5px 35px -15px rgba(0, 0, 0, 0.5);
-      }
     }
     .item-title.v-skeleton-loader__bone {
       width: 100px;
@@ -190,9 +213,6 @@ $shadow: 5px 5px 35px -15px rgba(0, 0, 0, 0.2);
     }
 
     @media screen and (max-width: 600px) {
-      .avatar-soft-skill__item {
-        box-shadow: 5px 5px 25px -5px rgba(0, 0, 0, 0.22);
-      }
       .item-title {
         display: none;
       }
@@ -205,6 +225,11 @@ $shadow: 5px 5px 35px -15px rgba(0, 0, 0, 0.2);
   .avatar-hard-skills {
     grid-column: 1/4;
 
+    display: grid;
+    grid-template-columns: repeat(7, 1fr);
+
+    overflow-y: auto;
+
     &__item {
       width: 60px;
       height: 60px;
@@ -213,6 +238,12 @@ $shadow: 5px 5px 35px -15px rgba(0, 0, 0, 0.2);
       display: flex;
       align-items: center;
       justify-content: center;
+      user-select: none;
+      pointer-events: none;
+
+      &:not(:first-child) {
+        margin-left: 10px;
+      }
     }
   }
 }
