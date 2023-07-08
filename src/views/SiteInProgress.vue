@@ -4,11 +4,14 @@
   </div>
 </template>
 
+<script setup>
+import {onMounted} from 'vue'
+console.log('kek')
+onMounted(() => {
+  console.log('mounted')
+})
+
+</script>
+
 <style>
-#app {
-  display: flex;
-  justify-content: center;
-  align-items: center;
-  height: 100vh;
-}
 </style>
