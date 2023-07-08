@@ -1,33 +1,35 @@
 <template>
   <section class="avatar-container">
-    <ul class="avatar-soft-skill items-end">
-      <li v-for="skill in skillsLeft" :key="skill" class="avatar-soft-skill__item text-nowrap">
-        <div v-show="skill.loading" class="item-title v-skeleton-loader__bone"></div>
-        <div v-show="!skill.loading">
-          <img :src="skill?.icon" class="item-icon" />
-          <span class="item-title">{{ skill?.title }}</span>
-        </div>
-      </li>
-    </ul>
-    <div class="profile-container d-flex justify-center items-center flex-column">
-      <figure class="profile-picture__container">
-        <img src="/profile_pic.jpg" class="profile-picture__image" alt="" />
-        <figcaption class="profile-picture__tag text-bold-large text-nowrap">
-          Frontend Engineer
-        </figcaption>
-      </figure>
-      <div class="profile__name text-bold-large">Damir Akzhigitov</div>
-      <div class="profile__location">Limassol, Cyprus</div>
+    <div class="d-flex justify-between">
+      <ul class="avatar-soft-skill items-end">
+        <li v-for="skill in skillsLeft" :key="skill" class="avatar-soft-skill__item text-nowrap">
+          <div v-show="skill.loading" class="item-title v-skeleton-loader__bone"></div>
+          <div v-show="!skill.loading">
+            <img :src="skill?.icon" class="item-icon" />
+            <span class="item-title">{{ skill?.title }}</span>
+          </div>
+        </li>
+      </ul>
+      <div class="profile-container d-flex justify-center items-center flex-column">
+        <figure class="profile-picture__container">
+          <img src="/profile_pic.jpg" class="profile-picture__image" alt="" />
+          <figcaption class="profile-picture__tag text-bold-large text-nowrap">
+            Frontend Engineer
+          </figcaption>
+        </figure>
+        <div class="profile__name text-bold-large">Damir Akzhigitov</div>
+        <div class="profile__location">Limassol, Cyprus</div>
+      </div>
+      <ul class="avatar-soft-skill items-end">
+        <li v-for="skill in skillsRight" :key="skill" class="avatar-soft-skill__item text-nowrap">
+          <div v-show="skill.loading" class="item-title v-skeleton-loader__bone"></div>
+          <div v-show="!skill.loading">
+            <img :src="skill?.icon" class="item-icon" />
+            <span class="item-title">{{ skill?.title }}</span>
+          </div>
+        </li>
+      </ul>
     </div>
-    <ul class="avatar-soft-skill items-end">
-      <li v-for="skill in skillsRight" :key="skill" class="avatar-soft-skill__item text-nowrap">
-        <div v-show="skill.loading" class="item-title v-skeleton-loader__bone"></div>
-        <div v-show="!skill.loading">
-          <img :src="skill?.icon" class="item-icon" />
-          <span class="item-title">{{ skill?.title }}</span>
-        </div>
-      </li>
-    </ul>
     <div class="avatar-hard-skills items-start">
       <div
         v-for="skill in hardSkills"
@@ -139,11 +141,6 @@ onMounted(() => {
 
 <style lang="scss">
 .avatar-container {
-  display: grid;
-  grid-template-rows: 1fr 60px;
-  grid-template-columns: 1fr 1fr 1fr;
-  grid-gap: 15px;
-
   max-width: 700px;
   width: 100%;
   margin: 0 auto;
@@ -189,6 +186,7 @@ onMounted(() => {
     padding: 0;
     font-family: 'JetBrains Mono', monospace;
     user-select: none;
+    width: 25%;
 
     .item-icon {
       width: 20px;
@@ -227,7 +225,7 @@ onMounted(() => {
 
     display: grid;
     grid-template-columns: repeat(7, 1fr);
-
+    grid-gap: 10px;
     overflow-y: auto;
 
     &__item {
@@ -240,10 +238,7 @@ onMounted(() => {
       justify-content: center;
       user-select: none;
       pointer-events: none;
-
-      &:not(:first-child) {
-        margin-left: 10px;
-      }
+      justify-self: center;
     }
   }
 }
