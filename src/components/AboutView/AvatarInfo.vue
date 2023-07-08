@@ -53,7 +53,7 @@
 <script setup lang="ts">
 import { ref, onMounted, Ref } from 'vue'
 import { format, getIcon } from '@/utils/formatters'
-import { SkillResponse } from '@/models/api/skills'
+import { SkillResponse } from '@/models/api'
 
 const loadingsSkills = [
   {

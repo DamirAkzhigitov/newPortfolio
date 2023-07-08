@@ -11,9 +11,7 @@
 </template>
 
 <script setup lang="ts">
-import { defineAsyncComponent, onMounted } from 'vue'
-
-const API = 'https://6h68rbyn3i.execute-api.eu-north-1.amazonaws.com/dev'
+import { defineAsyncComponent } from 'vue'
 
 const EducationBlock = defineAsyncComponent(
   () => import('@/components/AboutView/EducationBlock.vue')
@@ -30,34 +28,6 @@ const ShortDescription = defineAsyncComponent(
 const ExperienceList = defineAsyncComponent(
   () => import('@/components/AboutView/ExperienceList.vue')
 )
-
-const callApi = () => {
-  // instantiate a headers object
-  const myHeaders = new Headers()
-  // add content type header to object
-  myHeaders.append('Content-Type', 'application/json')
-  // using built in JSON utility package turn object to string and store in a variable
-  const raw = JSON.stringify({
-    firstName: 'Damir',
-    lastName: 'Testov'
-  })
-  // create a JSON object with parameters for API call and store in a variable
-  const requestOptions: RequestInit = {
-    method: 'POST',
-    headers: myHeaders,
-    body: raw,
-    redirect: 'follow'
-  }
-  // make API call with parameters and use promises to get response
-  fetch(API, requestOptions)
-    .then((response) => response.text())
-    .then((result) => alert(JSON.parse(result).body))
-    .catch((error) => console.log('error', error))
-}
-
-onMounted(() => {
-  // callApi()
-})
 </script>
 
 <style lang="scss">
