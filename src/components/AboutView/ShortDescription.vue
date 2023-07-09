@@ -22,9 +22,9 @@ import { AboutMeBlockItem } from '@/models/api'
 export default {
   props: {
     value: {
-      type: Array as PropType<AboutMeBlockItem>,
+      type: Object as PropType<AboutMeBlockItem>,
       default() {
-        return []
+        return {}
       }
     },
     animation: {
@@ -68,6 +68,15 @@ export default {
 
           setTimeout(() => {
             emit('animationDone', { prev: 'description', next: 'experience' })
+
+            if (localStorage.getItem('spoiler-learn')) {
+              localStorage.setItem('spoiler-learn', 'true')
+
+              expanded.value = true
+              setTimeout(() => {
+                expanded.value = false
+              }, 1500)
+            }
           }, 500)
         }
       }
@@ -91,7 +100,7 @@ section.description {
     overflow: hidden;
     position: relative;
     cursor: pointer;
-    transition: 0.3s;
+    transition: 0.5s;
     user-select: none;
 
     p:not(:first-child) {

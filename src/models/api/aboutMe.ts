@@ -1,5 +1,3 @@
-import { s } from 'vitest/dist/types-dea83b3d'
-
 export interface ExperienceItem {
   M: {
     role_name: {
@@ -24,6 +22,9 @@ export interface ExperienceItem {
       S: string
     }
     start_date: {
+      S: string
+    }
+    image: {
       S: string
     }
   }
