@@ -6,7 +6,11 @@
       :animation="animationSteps.description"
       class="short-description"
     />
-    <contact-block :value="contactItem" class="contact-block" />
+    <contact-block
+      :value="contactItem"
+      :animation="animationSteps.description"
+      class="contact-block"
+    />
     <experience-list :value="experienceItems" class="experience-list" />
     <education-block :value="educationItems" class="education-block" />
     <projects-description class="projects-description" />
